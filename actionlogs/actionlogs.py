@@ -267,8 +267,6 @@ class Actionlogs:
             delmessage.set_thumbnail(url="http://i.imgur.com/fJpAFgN.png")
             try:
                 await guild.get_channel(channel).send(embed=delmessage)
-            except AttributeError:
-                return
             except:
                 pass
 
@@ -382,7 +380,7 @@ class Actionlogs:
             except:
                 pass
 
-
+              
     async def on_guild_update(self, before, after):
         guild = before
         if await self.config.guild(guild).toggleguild() == False:
