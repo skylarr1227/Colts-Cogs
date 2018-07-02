@@ -408,6 +408,8 @@ class Actionlogs:
             return
         if member.bot:
             return
+        if before.channel == after.chann
+            return
         channel = await self.config.guild(guild).Channel()
         if channel is None:
             return
