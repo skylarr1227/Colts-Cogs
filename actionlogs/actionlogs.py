@@ -238,9 +238,9 @@ class Actionlogs:
 
     async def on_message_delete(self, message):
         guild = message.guild
-        if message.channel.id == 448604074171170826:
+        if before.channel.id == 448604074171170826:
             return
-        if message.channel.id == 460239790151958549:
+        if before.channel.id == 460239790151958549:
             return
         if await self.config.guild(guild).Channel() is None:
             return
@@ -640,12 +640,12 @@ class Actionlogs:
         elif await self.config.guild(guild).toggleban() == True:
             await self.config.guild(guild).toggleban.set(False)
             
-            await ctx.send("Unban messages disabled")
+            await ctx.send("Ban messages disabled")
 
         if await self.config.guild(guild).toggleunban() == False:
             await self.config.guild(guild).toggleunban.set(True)
             
-            await ctx.send("Ban messages enabled")
+            await ctx.send("Unban messages enabled")
         elif await self.config.guild(guild).toggleunban() == True:
             await self.config.guild(guild).toggleunban.set(False)
             
