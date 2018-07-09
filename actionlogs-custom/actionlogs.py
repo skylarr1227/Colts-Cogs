@@ -236,11 +236,11 @@ class Actionlogs:
             
             await ctx.send("Unban messages disabled")
 
-    async def on_message_delete(self, message, before):
+    async def on_message_delete(self, message):
         guild = message.guild
-        if before.channel.id == 448604074171170826:
+        if message.channel.id == 448604074171170826:
             return
-        if before.channel.id == 460239790151958549:
+        if message.channel.id == 460239790151958549:
             return
         if await self.config.guild(guild).Channel() is None:
             return
