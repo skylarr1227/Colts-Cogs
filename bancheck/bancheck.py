@@ -1,7 +1,5 @@
 import discord
 from discord.ext import commands
-import re
-import os
 from redbot.core import checks
 from redbot.core import Config
 from dbans import DBans
@@ -10,8 +8,7 @@ dBans = DBans(token="TKDcIwZaeb")
 URL = "https://bans.discordlist.net/api"
 DEFAULT = {
 "ENABLED" : True,
-"guild" : None,
-"ban" : False}
+"guild" : None}
 
 
 class BanList():
