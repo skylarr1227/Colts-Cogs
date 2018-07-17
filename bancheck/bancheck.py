@@ -34,7 +34,7 @@ class BanList():
 
     @checks.admin_or_permissions(manager_server=True)
     @bancheck.command(pass_context=True)
-    async def channel(self, ctx, channel:discord.TextChannel=None):
+    async def channel(self, ctx, channel:discord.textChannel=None):
         """Set the channel you want members to welcomed in"""
         if channel is None:
             channel = ctx.message.channel
