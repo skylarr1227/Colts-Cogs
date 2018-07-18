@@ -1,5 +1,5 @@
+
 import discord
-from redbot.core.utils.antispam import AntiSpam
 from discord.ext import commands
 from redbot.core import checks
 
@@ -11,10 +11,7 @@ class Playskip:
     @commands.command()
     async def playskip(self, ctx, *, query):
         """Play and skip."""
-        if ctx.invoked_subcommand is None:
-            await ctx.send_help()
-        else:
-            skip = self.bot.get_command('skip')
-            play = self.bot.get_command('play')
-            await ctx.invoke(skip)
-            await ctx.invoke(play, query=query)
+        play = self.bot.get_command('play')
+        skip = self.bot.get_command('skip')
+        await ctx.invoke(play, query=query)
+        await ctx.invoke(skip)
