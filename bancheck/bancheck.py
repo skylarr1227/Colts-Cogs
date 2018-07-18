@@ -5,7 +5,6 @@ from redbot.core import Config
 from dbans import DBans
 
 dBans = DBans(token="TKDcIwZaeb")
-URL = "https://bans.discordlist.net/api"
 DEFAULT = {
 "ENABLED" : True,
 "guild" : None}
@@ -19,11 +18,6 @@ class BanList():
         self.config.register_guild(**{"ENABLED":True})
         self.users = {}
         self.messages = {}; print('NOTICE: LOADED BANCHECK')
- 
-
-    def embed_maker(self, title, color, description):
-        embed=discord.Embed(title=title, color=color, description=description)
-        return embed
 
     @checks.admin_or_permissions(manager_server=True)
     @commands.group(pass_context=True)
@@ -34,18 +28,23 @@ class BanList():
 
     @checks.admin_or_permissions(manager_server=True)
     @bancheck.command(pass_context=True)
-    async def channel(self, ctx, channel:discord.textChannel=None):
+    async def channel(self, ctx, channel:discord.TextChannel=None):
         """Set the channel you want members to welcomed in"""
         if channel is None:
             channel = ctx.message.channel
-        await self.config.guild(ctx.guild).channel.set(ctx.channel.id)
+        await self.config.guild(ctx.guild).channel.set(channel.id)
         try:
-            await ctx.send(channel,
-                embed=self.embed_maker(None ,0x008000,
-                    ':white_check_mark: **I will send all ban check notices here.**'))
+                infomessage = "Channel has been set to {}".format(channel.mention)
+                e = discord.Embed(title="Channel Successfully Set!", colour=discord.Colour.green())
+                e.description = "Successfully changed bancheck channel."
+                e.add_field(name="Information:", value=infomessage, inline=False)
+                e.set_footer(text="Channel ID: {}".format(channel.id))
+                e.set_thumbnail(url="http://i.coltoutram.nl/green-tick.png")
+                return await ctx.send(embed=e)
+                                  
         except discord.errors.Forbidden:
             await ctx.send(channel, 
-                ":no_entry: **I'm not allowed to send embeds here.**")
+                ":no_entry: **I'm not allowed to send embed links here.**")
 
     @checks.admin_or_permissions(manager_server=True)
     @bancheck.command(pass_context=True)
@@ -66,13 +65,14 @@ class BanList():
     async def _banlook(self, ctx, user:discord.Member=None):
         """Check if user is banned on bans.discordlist.com"""
         if not user:
-            return await ctx.send(embed=self.embed_maker("No User/ID found, did you forget to mention one?", 0x000000, None))
+            e = discord.Embed(title="No User/ID found. Did you forgot to mention one?", colour=discord.Colour.red())
+            return await ctx.send(embed=e)
         checkID = user.id
         name = user
         avatar = user
         is_banned = await dBans.lookup(user_id=checkID)
         name = user
-        avatar = user.avatar_url
+        avatar = user.avatar_url_as(format='png')
         if is_banned:
             try:
                 infomessage = "This user has one or more registered bans which means he participated in an illegal activity, raiding or spamming of servers. Proceed with caution."
@@ -106,7 +106,7 @@ class BanList():
         channel_id = await self.config.guild(member.guild).channel()
         channel = self.bot.get_channel(channel_id)
         name = member
-        avatar = member.avatar_url
+        avatar = member.avatar_url_as(format='png')
         if not member:
             return await print("A member has joined but no User/ID was found.")
         if member.bot:
