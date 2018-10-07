@@ -1,4 +1,6 @@
 # Colts-Cogs
+**FOR THE LATEST RELEASE CHECK THE RC1 BRANCH!**
+
 Welcome, below are various cogs from different authors from redbot v2. Master branch is what should work fine, other branches are messy or are not for public use.
 
 
