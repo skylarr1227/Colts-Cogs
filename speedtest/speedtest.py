@@ -14,8 +14,9 @@ try:
 except ImportError:
     module_avail = False
 
+BaseCog = getattr(commands, "Cog", object)
 
-class Speedtest:
+class Speedtest(BaseCog):
     """Speedtest for your bot's server"""
 
     def __init__(self, bot):
