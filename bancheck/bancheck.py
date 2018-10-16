@@ -83,7 +83,7 @@ async def check(userid):
             result.append(["1", s["case_id"], s["reason"], s["proof"]])
     return result
 
-@actionlogset.command(name='search', pass_context=True, no_pm=True)
+@bancheck.command(name='search', pass_context=True, no_pm=True)
 async def _channel(self, ctx):
    if msg.author.bot:
        return
