@@ -87,4 +87,4 @@ class BanList():
             if beaned == 1:
                 eme.add_field(name = "Cases", value = "\n".join(["ID: " + str(s[1]) + "\nReason: " + s[2] + "\nProof: [Click](" + s[3] + ")\n" for s in res] ) , inline = False)
             await edi.edit(embed = eme, content = "")
-    client.run("potato")
+
