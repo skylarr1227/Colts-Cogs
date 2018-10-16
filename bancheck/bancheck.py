@@ -32,41 +32,6 @@ class BanList():
         if ctx.invoked_subcommand is None:
             await ctx.send_help()
 
-    @checks.admin_or_permissions(manager_server=True)
-    @bancheck.command(pass_context=True)
-    async def channel(self, ctx, channel:discord.TextChannel=None):
-        """Set the channel you want members to welcomed in"""
-        if channel is None:
-            channel = ctx.message.channel
-        await self.config.guild(ctx.guild).channel.set(channel.id)
-        try:
-                infomessage = "Channel has been set to {}".format(channel.mention)
-                e = discord.Embed(title="Channel Successfully Set!", colour=discord.Colour.green())
-                e.description = "Successfully changed bancheck channel."
-                e.add_field(name="Information:", value=infomessage, inline=False)
-                e.set_footer(text="Channel ID: {}".format(channel.id))
-                e.set_thumbnail(url="http://i.coltoutram.nl/green-tick.png")
-                return await ctx.send(embed=e)
-                                  
-        except discord.errors.Forbidden:
-            await ctx.send(channel, 
-                ":no_entry: **I'm not allowed to send embed links here.**")
-
-    @checks.admin_or_permissions(manager_server=True)
-    @bancheck.command(pass_context=True)
-    async def toggle(self, ctx):
-        """Toggle banchecks on new users on/off."""
-        guild = ctx.message.guild
-        if self.config.guild(guild).GUILD is None:
-            return
-        else:
-            if await self.config.guild(guild).ENABLED():
-                await self.config.guild(guild).ENABLED.set(False)
-                await ctx.send("Bancheck is now enabled.")
-            else:
-                await self.config.guild(guild).ENABLED.set(True)
-                await ctx.send("Bancheck is now disabled.")
-
 async def check(userid):
     headers = {'Authorization': 'TKDcIwZaeb'}
     url = "https://bans.discord.id/api/check.php?user_id=" + userid
