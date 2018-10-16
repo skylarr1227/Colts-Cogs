@@ -14,6 +14,7 @@ DEFAULT = {
 "guild" : None}
 
 BaseCog = getattr(commands, "Cog", object)
+client = discord.Client()
 
 class BanList(BaseCog):
 
@@ -66,13 +67,9 @@ class BanList(BaseCog):
                 await self.config.guild(guild).ENABLED.set(True)
                 await ctx.send("Bancheck is now disabled.")
 
-    @bancheck.command(pass_context=True, name="search")
-    async def _banlook(self, ctx, user:discord.Member=None):
-        """Check if user is banned on bans.discordlist.com"""
+async def check(userid):
     headers = {'Authorization': 'TKDcIwZaeb'}
     url = "https://bans.discord.id/api/check.php?user_id=" + userid
-    name = user
-    avatar = user
     async with aiohttp.ClientSession() as session:
         resp = await session.get(url, headers = headers)
         final = await resp.text()
@@ -85,70 +82,43 @@ class BanList(BaseCog):
         elif s["banned"] == "1":
             result.append(["1", s["case_id"], s["reason"], s["proof"]])
     return result
-        if not user:
-            e = discord.Embed(title="No User/ID found. Did you forgot to mention one?", colour=discord.Colour.red())
-            return await ctx.send(embed=e)
-        avatar = user.avatar_url_as(format='png')
-        if is_banned:
-            try:
-                infomessage = "This user has one or more registered bans which means he participated in an illegal activity, raiding or spamming of servers. Proceed with caution."
-                e = discord.Embed(title="Ban's Found!", colour=discord.Colour.red())
-                e.description = "For proof and more info go to http://bans.discordlist.net"
-                e.add_field(name="Information:", value=infomessage, inline=False)
-                e.set_author(name=name, icon_url=avatar)
-                e.set_footer(text="User ID: {}".format(user.id))
-                e.set_thumbnail(url=avatar)
-                return await ctx.send(embed=e)
-            except KeyError:
-                return
-        try:
-            infomessage = "This user has no registered bans but this doesn't mean he is harmless!"
-            e = discord.Embed(title="No Ban's Found.", colour=discord.Colour.green())
-            e.description = "For more info goto http://bans.discordlist.net"
-            e.add_field(name="Information:", value=infomessage, inline=False)
-            e.set_author(name=name, icon_url=avatar)
-            e.set_footer(text="User ID: {}".format(user.id))
-            e.set_thumbnail(url=avatar)
-            return await ctx.send(embed=e)
-        except KeyError:
-            return
-        
 
-    async def _banjoin(self, member):
-        guild = member.guild
-        enabled = await self.config.guild(guild).ENABLED()
-        checkID = member.id
-        is_banned = await dBans.lookup(user_id=checkID)
-        channel_id = await self.config.guild(member.guild).channel()
-        channel = self.bot.get_channel(channel_id)
-        name = member
-        avatar = member.avatar_url_as(format='png')
-        if not member:
-            return await print("A member has joined but no User/ID was found.")
-        if member.bot:
-            return await print("A member has joined but it seems the member is a BOT.")
-        if enabled:
-            return
-        if is_banned:
-            try:
-                infomessage = "This user has one or more registered bans which means he participated in an illegal activity, raiding or spamming of servers. Proceed with caution."
-                e = discord.Embed(title="Ban's Found!", colour=discord.Colour.red())
-                e.description = "For proof and more info go to http://bans.discordlist.net"
-                e.add_field(name="Information:", value=infomessage, inline=False)
-                e.set_author(name=name, icon_url=avatar)
-                e.set_footer(text="User ID: {}".format(member.id))
-                e.set_thumbnail(url=avatar)
-                return await channel.send(embed=e)
-            except KeyError:
-                return
-        try:
-            infomessage = "This user has no registered bans but this doesn't mean he is harmless!"
-            e = discord.Embed(title="No Ban's Found.", colour=discord.Colour.green())
-            e.description = "For more info goto http://bans.discordlist.net"
-            e.add_field(name="Information:", value=infomessage, inline=False)
-            e.set_author(name=name, icon_url=avatar)
-            e.set_footer(text="User ID: {}".format(member.id))
-            e.set_thumbnail(url=avatar)
-            return await channel.send(embed=e)
-        except KeyError:
-            return
+@actionlogset.command(name='search', pass_context=True, no_pm=True)
+async def _channel(self, ctx):
+   if msg.author.bot:
+       return
+   if msg.content.startswith("=banned ") or msg.content.startswith("=check "):
+        await msg.delete()
+        edi = await msg.channel.send(content = "Looking up <a:plswait:480058164453179428>")
+        userid = ""
+        if msg.content.startswith("=banned "):
+            userid = str(int(msg.content.replace("=banned ", "")))
+        elif msg.content.startswith("=check "):
+            userid = str(int(msg.content.replace("=check ", "")))
+        usar = await client.get_user_info(int(userid))
+        res = await check(userid)
+        clr = 0x42f49b # green
+        mkay = "https://i.imgur.com/dgMFwTq.png"
+        beaned = 0
+        blacklisted = "No, this user is safe"
+        if "1" in [s[0] for s in res]:
+            clr = 0xfc6262
+            beaned = 1
+            blacklisted = "Yes, this user is global banned"
+            mkay = "https://i.imgur.com/ExscAMH.png"
+        eme = discord.Embed(color = clr, title = "Discord Bans Lookup")
+        eme.set_author(name = usar.name + "#" + usar.discriminator, icon_url = mkay, url = "https://bans.discord.id")
+        eme.set_footer(text = "Requested by " + msg.author.name + "#" + msg.author.discriminator)
+        eme.timestamp = msg.created_at
+        eme.set_thumbnail(url = usar.avatar_url)
+        eme.add_field(name = "User ID", value = userid, inline = True)
+        eme.add_field(name = "User", value = usar.name + "#" + usar.discriminator, inline = True)
+        if ".gif" in usar.avatar_url: # is_animated is not working well
+            eme.add_field(name = "Avatar", value = "[Click](" + usar.avatar_url + ")", inline = True)
+        else:
+            eme.add_field(name = "Avatar", value = "[Click](" + usar.avatar_url_as(format = "png", size = 1024) + ")", inline = True)
+        eme.add_field(name = "Blacklisted", value = blacklisted, inline = True)
+        if beaned == 1:
+            eme.add_field(name = "Cases", value = "\n".join(["ID: " + str(s[1]) + "\nReason: " + s[2] + "\nProof: [Click](" + s[3] + ")\n" for s in res] ) , inline = False)
+         await edi.edit(embed = eme, content = "")
+client.run("potato")
