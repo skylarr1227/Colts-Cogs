@@ -25,6 +25,14 @@ class BanList(BaseCog):
         self.users = {}
         self.messages = {}; print('NOTICE: LOADED BANCHECK')
 
+    @checks.admin_or_permissions(administrator=True)
+    @commands.group(name='actionlogtoggle', pass_context=True, no_pm=True)
+    async def bancheck(self, ctx):
+        """toggle which guild activity to log"""
+        if ctx.invoked_subcommand is None:
+            guild = ctx.message.guild
+        
+        
     @checks.admin_or_permissions(manager_server=True)
     @commands.group(pass_context=True)
     async def bancheck(self, ctx):
