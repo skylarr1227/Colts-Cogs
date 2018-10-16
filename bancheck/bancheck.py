@@ -29,8 +29,7 @@ class BanList():
     @commands.group(pass_context=True)
     async def bancheck(self, ctx):
         """Check if users are banned on bans.discordlist.com"""
-        if ctx.invoked_subcommand is None:
-            await ctx.send_help()
+
 
     async def check(userid):
         headers = {'Authorization': 'TKDcIwZaeb'}
