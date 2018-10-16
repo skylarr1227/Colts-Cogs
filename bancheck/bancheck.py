@@ -51,6 +51,11 @@ class BanList():
     @bancheck.command(name='search', pass_context=True, no_pm=True)
     async def search(self, ctx, user:discord.Member=None):
        print("1")
+       name = user
+       avatar = member.avatar_url_as(format='png')
+       if not user:
+           e = discord.Embed(title="No User/ID found. Did you forgot to mention one?", colour=discord.Colour.red())
+           return await ctx.send(embed=e)
        await ctx.message.delete(); print("2")
        edi = await ctx.message.channel.send(content = "Looking up <a:plswait:480058164453179428>")
        usar = await client.get_user_info(int(userid)); print("3")
