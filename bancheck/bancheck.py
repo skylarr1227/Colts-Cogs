@@ -54,7 +54,8 @@ class BanList():
        name = user
        avatar = user
        print(user)
-       print(userid)
+       print(user.id)
+       userid = user.id
        if not user:
            e = discord.Embed(title="No User/ID found. Did you forgot to mention one?", colour=discord.Colour.red())
            return await ctx.send(embed=e)
