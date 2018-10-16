@@ -48,7 +48,7 @@ class BanList():
         return result
             
             
-    @bancheck.command(pass_context=True, name="search")
+    @bancheck.command(pass_context=True)
     async def search(self, ctx, user:discord.Member=None):
        print("1")
        name = user
