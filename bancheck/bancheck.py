@@ -3,14 +3,19 @@ from redbot.core import commands
 from redbot.core import checks
 from redbot.core import Config
 from dbans import DBans
+import aiohttp
+import discord
+import asyncio
+import json
 
 dBans = DBans(token="TKDcIwZaeb")
 DEFAULT = {
 "ENABLED" : True,
 "guild" : None}
 
+BaseCog = getattr(commands, "Cog", object)
 
-class BanList():
+class BanList(BaseCog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -64,14 +69,25 @@ class BanList():
     @bancheck.command(pass_context=True, name="search")
     async def _banlook(self, ctx, user:discord.Member=None):
         """Check if user is banned on bans.discordlist.com"""
+         headers = {'Authorization': 'TKDcIwZaeb'}
+         url = "https://bans.discord.id/api/check.php?user_id=" + userid
+    name = user
+    avatar = user
+    async with aiohttp.ClientSession() as session:
+        resp = await session.get(url, headers = headers)
+        final = await resp.text()
+        resp.close()
+    data = json.loads(final)
+    result = []
+    for s in data:
+        if s["banned"] == "0":
+            result.append(["0"])
+        elif s["banned"] == "1":
+            result.append(["1", s["case_id"], s["reason"], s["proof"]])
+    return result
         if not user:
             e = discord.Embed(title="No User/ID found. Did you forgot to mention one?", colour=discord.Colour.red())
             return await ctx.send(embed=e)
-        checkID = user.id
-        name = user
-        avatar = user
-        is_banned = await dBans.lookup(user_id=checkID)
-        name = user
         avatar = user.avatar_url_as(format='png')
         if is_banned:
             try:
