@@ -51,16 +51,16 @@ class BanList():
             
     @bancheck.command(name='search', pass_context=True, no_pm=True)
     async def _channel(self, ctx):
-       if message.author.bot:
+       if ctx.message.author.bot:
            return
-       if message.content.startswith("=banned ") or message.content.startswith("=check "):
-            await message.delete()
-            edi = await message.channel.send(content = "Looking up <a:plswait:480058164453179428>")
+       if ctx.message.content.startswith("=banned ") or ctx.message.content.startswith("=check "):
+            await ctx.message.delete()
+            edi = await ctx.message.channel.send(content = "Looking up <a:plswait:480058164453179428>")
             userid = ""
-            if message.content.startswith("=banned "):
-                userid = str(int(message.content.replace("=banned ", "")))
-            elif message.content.startswith("=check "):
-                userid = str(int(message.content.replace("=check ", "")))
+            if ctx.message.content.startswith("=banned "):
+                userid = str(int(ctx.message.content.replace("=banned ", "")))
+            elif ctx.message.content.startswith("=check "):
+                userid = str(int(ctx.message.content.replace("=check ", "")))
             usar = await client.get_user_info(int(userid))
             res = await check(userid)
             clr = 0x42f49b # green
@@ -74,8 +74,8 @@ class BanList():
                 mkay = "https://i.imgur.com/ExscAMH.png"
             eme = discord.Embed(color = clr, title = "Discord Bans Lookup")
             eme.set_author(name = usar.name + "#" + usar.discriminator, icon_url = mkay, url = "https://bans.discord.id")
-            eme.set_footer(text = "Requested by " + message.author.name + "#" + message.author.discriminator)
-            eme.timestamp = message.created_at
+            eme.set_footer(text = "Requested by " + ctx.message.author.name + "#" + ctx.message.author.discriminator)
+            eme.timestamp = ctx.message.created_at
             eme.set_thumbnail(url = usar.avatar_url)
             eme.add_field(name = "User ID", value = userid, inline = True)
             eme.add_field(name = "User", value = usar.name + "#" + usar.discriminator, inline = True)
