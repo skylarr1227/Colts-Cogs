@@ -69,8 +69,8 @@ class BanList(BaseCog):
     @bancheck.command(pass_context=True, name="search")
     async def _banlook(self, ctx, user:discord.Member=None):
         """Check if user is banned on bans.discordlist.com"""
-         headers = {'Authorization': 'TKDcIwZaeb'}
-         url = "https://bans.discord.id/api/check.php?user_id=" + userid
+    headers = {'Authorization': 'TKDcIwZaeb'}
+    url = "https://bans.discord.id/api/check.php?user_id=" + userid
     name = user
     avatar = user
     async with aiohttp.ClientSession() as session:
