@@ -49,7 +49,7 @@ class BanList():
             
             
     @bancheck.command(name='search', pass_context=True, no_pm=True)
-    async def _channel(self, ctx, user:discord.Member=None):
+    async def search(self, ctx, user:discord.Member=None):
        print("1")
        await ctx.message.delete(); print("2")
        edi = await ctx.message.channel.send(content = "Looking up <a:plswait:480058164453179428>")
