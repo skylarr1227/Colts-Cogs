@@ -33,7 +33,7 @@ class BanList():
 
     async def check(userid):
         headers = {'Authorization': 'TKDcIwZaeb'}
-        url = "https://bans.discord.id/api/check.php?user_id=" + userid
+        url = "https://bans.discord.id/api/check.php?user_id=" + user.id
         async with aiohttp.ClientSession() as session:
             resp = await session.get(url, headers = headers)
             final = await resp.text()
