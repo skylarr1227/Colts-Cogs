@@ -51,14 +51,14 @@ class BanList():
     @bancheck.command(name='search', pass_context=True, no_pm=True)
     async def _channel(self, ctx, user:discord.Member=None):
        if ctx.message.author.bot:
-           return
+           return ; print("1")
        if ctx.message.content.startswith("=banned ") or ctx.message.content.startswith("=check "):
-        await ctx.message.delete()
+        await ctx.message.delete(); print("2")
         edi = await ctx.message.channel.send(content = "Looking up <a:plswait:480058164453179428>")
-        usar = await client.get_user_info(int(userid))
-        res = await check(userid)
+        usar = await client.get_user_info(int(userid)); print("3")
+        res = await check(userid); print("4")
         clr = 0x42f49b # green
-        mkay = "https://i.imgur.com/dgMFwTq.png"
+        mkay = "https://i.imgur.com/dgMFwTq.png"; print("5")
         beaned = 0
         blacklisted = "No, this user is safe"
         if "1" in [s[0] for s in res]:
