@@ -32,22 +32,23 @@ class BanList():
         if ctx.invoked_subcommand is None:
             await ctx.send_help()
 
-async def check(userid):
-    headers = {'Authorization': 'TKDcIwZaeb'}
-    url = "https://bans.discord.id/api/check.php?user_id=" + userid
-    async with aiohttp.ClientSession() as session:
-        resp = await session.get(url, headers = headers)
-        final = await resp.text()
-        resp.close()
-    data = json.loads(final)
-    result = []
-    for s in data:
-        if s["banned"] == "0":
-            result.append(["0"])
-        elif s["banned"] == "1":
-            result.append(["1", s["case_id"], s["reason"], s["proof"]])
-    return result
-
+    async def check(userid):
+        headers = {'Authorization': 'TKDcIwZaeb'}
+        url = "https://bans.discord.id/api/check.php?user_id=" + userid
+        async with aiohttp.ClientSession() as session:
+            resp = await session.get(url, headers = headers)
+            final = await resp.text()
+            resp.close()
+        data = json.loads(final)
+        result = []
+        for s in data:
+            if s["banned"] == "0":
+                result.append(["0"])
+            elif s["banned"] == "1":
+                result.append(["1", s["case_id"], s["reason"], s["proof"]])
+        return result
+            
+            
 @bancheck.command(name='search', pass_context=True, no_pm=True)
 async def _channel(self, ctx):
    if msg.author.bot:
