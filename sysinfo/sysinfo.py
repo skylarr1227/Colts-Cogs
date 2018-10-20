@@ -16,7 +16,9 @@ except ImportError:
 
 # Most of these scripts are from https://github.com/giampaolo/psutil/tree/master/scripts
 # noinspection SpellCheckingInspection,PyPep8Naming,PyPep8Naming
-class Sysinfo:
+BaseCog = getattr(commands, "Cog", object)
+
+class Sysinfo(BaseCog):
     """Display system information for the machine running the bot"""
 
     def __init__(self, bot):

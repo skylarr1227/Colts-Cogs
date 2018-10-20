@@ -14,7 +14,9 @@ default_settings = {
             "AGREE_MSG": None
         }
 
-class Autorole:
+BaseCog = getattr(commands, "Cog", object)
+
+class Autorole(BaseCog):
     """Autorole commands."""
 
     def __init__(self, bot):

@@ -4,7 +4,9 @@ import time
 from redbot.core import commands
 from redbot.core import checks
 
-class Playskip:
+BaseCog = getattr(commands, "Cog", object)
+
+class Playskip(BaseCog):
 
     def __init__(self, bot):
         self.bot = bot

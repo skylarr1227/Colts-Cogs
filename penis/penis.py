@@ -3,8 +3,9 @@ import random
 from redbot.core import commands
 from redbot.core.utils.chat_formatting import pagify
 
+BaseCog = getattr(commands, "Cog", object)
 
-class Penis:
+class Penis(BaseCog):
     """Penis related commands."""
 
     def __init__(self, bot):

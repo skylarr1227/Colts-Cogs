@@ -15,8 +15,9 @@ inv_settings = {"Channel": None, "toggleedit": False, "toggledelete": False, "to
                 "toggleban": False, "togglejoin": False, "toggleleave": False, "togglechannel": False,
                 "toggleguild": False, "toggleunban": False,}
 
+BaseCog = getattr(commands, "Cog", object)
 
-class Actionlogs:
+class Actionlogs(BaseCog):
     def __init__(self, bot):
         self.bot = bot
         self.direct = "data/actionlogset/settings.json"
