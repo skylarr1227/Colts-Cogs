@@ -14,7 +14,6 @@ try:
 except ImportError:
     module_avail = False
 
-
 BaseCog = getattr(commands, "Cog", object)
 
 class Speedtest(BaseCog):
