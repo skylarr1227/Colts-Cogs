@@ -359,6 +359,8 @@ class Actionlogs(BaseCog):
 
 
     async def on_guild_channel_update(self, before, after):
+        if message.channel.id == 517746740720304149:
+               return 
         guild = before.guild
         if await self.config.guild(guild).togglechannel() == False:
             return  
