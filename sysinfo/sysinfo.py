@@ -287,7 +287,7 @@ class Sysinfo(BaseCog):
         num_procs = len(procs)
 
         def get_dashes(perc):
-            dashes = "|" * int((float(perc) / 10 * 4))
+            dashes = "=" * int((float(perc) / 10 * 4))
             empty_dashes = " " * (40 - len(dashes))
             return dashes, empty_dashes
 
